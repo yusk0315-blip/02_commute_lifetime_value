@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>通勤が奪う“生涯のお金”換算</title>
+<meta name="theme-color" content="#0b1020" />
+<style>
+    :root{
+      --bg0:#060913;
+      --bg1:#0a1226;
+      --card: rgba(255,255,255,.08);
+      --card2: rgba(255,255,255,.10);
+      --stroke: rgba(255,255,255,.14);
+      --text:#eaf0ff;
+      --muted: rgba(234,240,255,.72);
+      --good:#54f0c1;
+      --warn:#ffd166;
+      --bad:#ff5c7a;
+      --shadow: 0 18px 50px rgba(0,0,0,.45);
+      --r: 18px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Hiragino Sans", "Noto Sans JP", "Segoe UI", Arial;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 20% 10%, rgba(84,240,193,.22), transparent 60%),
+        radial-gradient(1000px 520px at 85% 20%, rgba(255,92,122,.18), transparent 60%),
+        radial-gradient(900px 520px at 60% 95%, rgba(99,134,255,.18), transparent 60%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+
+    .wrap{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 18px 14px 42px;
+      padding-bottom: calc(42px + env(safe-area-inset-bottom));
+    }
+
+    .top{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+      margin: 8px 2px 14px;
+    }
+    .brand{
+      display:flex; gap:10px; align-items:center;
+    }
+    .logo{
+      width:40px; height:40px; border-radius:14px;
+      background: linear-gradient(135deg, rgba(84,240,193,.95), rgba(99,134,255,.95));
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .logo:after{
+      content:"";
+      position:absolute; inset:-30%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.55), transparent 50%);
+      transform: rotate(18deg);
+    }
+    .titlebox .t1{ font-weight:800; letter-spacing:.02em; }
+    .titlebox .t2{ color:var(--muted); font-size:12px; margin-top:2px; }
+
+    .pill{
+      font-size:12px;
+      color: rgba(234,240,255,.85);
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.06);
+      padding: 8px 10px;
+      border-radius: 999px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 14px;
+    }
+    @media (max-width: 860px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    .card{
+      border:1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .card .inner{ padding: 16px; }
+    .hero{
+      padding: 16px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+      background:
+        radial-gradient(600px 260px at 20% 0%, rgba(84,240,193,.18), transparent 60%),
+        radial-gradient(560px 260px at 85% 10%, rgba(255,92,122,.16), transparent 60%),
+        radial-gradient(520px 260px at 50% 120%, rgba(99,134,255,.14), transparent 60%);
+    }
+    .hero h1{
+      margin: 0;
+      font-size: 18px;
+      letter-spacing:.01em;
+    }
+    .hero p{ margin: 6px 0 0; color: var(--muted); font-size: 13px; line-height:1.55; }
+
+    .kpis{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    @media (max-width: 520px){
+      .kpis{ grid-template-columns: 1fr; }
+    }
+    .kpi{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+      border-radius: 14px;
+      padding: 12px;
+    }
+    .kpi .label{ font-size:12px; color: var(--muted); }
+    .kpi .value{
+      margin-top: 6px;
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing:.01em;
+    }
+    .kpi .sub{ margin-top: 4px; font-size: 12px; color: rgba(234,240,255,.78); }
+
+    .bar{
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.12);
+      overflow:hidden;
+      margin-top: 10px;
+    }
+    .bar > i{
+      display:block;
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, rgba(84,240,193,.95), rgba(255,209,102,.95), rgba(255,92,122,.95));
+      border-radius: 999px;
+      transition: width .35s ease;
+    }
+
+    .sectionTitle{
+      display:flex; align-items:center; justify-content:space-between;
+      margin: 14px 0 10px;
+      padding: 0 2px;
+    }
+    .sectionTitle h2{
+      margin:0;
+      font-size: 14px;
+      letter-spacing:.02em;
+    }
+    .sectionTitle .hint{ font-size:12px; color: var(--muted); }
+
+    .row{ display:grid; grid-template-columns: 1fr; gap: 10px; }
+    .field{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.16);
+      border-radius: 14px;
+      padding: 12px;
+    }
+    .field .head{
+      display:flex; justify-content:space-between; align-items:baseline;
+      gap: 10px;
+    }
+    .field .name{ font-size: 13px; font-weight: 700; }
+    .field .val{ font-size: 12px; color: rgba(234,240,255,.8); }
+    input[type="range"]{ width:100%; margin-top: 10px; }
+    .mini{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top:10px;
+    }
+    .mini .chip{
+      font-size:12px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color: rgba(234,240,255,.9);
+      cursor:pointer;
+      user-select:none;
+    }
+    .mini .chip.active{
+      border-color: rgba(84,240,193,.55);
+      box-shadow: 0 0 0 3px rgba(84,240,193,.12);
+    }
+
+    .tips{
+      display:grid;
+      gap: 10px;
+    }
+    .tip{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.14);
+      border-radius: 14px;
+      padding: 12px;
+    }
+    .tip .ttl{ font-size:13px; font-weight: 800; }
+    .tip .txt{ margin-top:6px; font-size: 12px; line-height:1.6; color: rgba(234,240,255,.82); }
+
+    .btnRow{ display:flex; gap:10px; flex-wrap:wrap; margin-top: 12px; }
+    button{
+      appearance:none; border:none;
+      padding: 12px 14px;
+      border-radius: 14px;
+      color: var(--text);
+      font-weight: 800;
+      letter-spacing:.01em;
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.14);
+      cursor:pointer;
+    }
+    button.primary{
+      background: linear-gradient(135deg, rgba(84,240,193,.95), rgba(99,134,255,.95));
+      border-color: rgba(255,255,255,.16);
+    }
+    button:active{ transform: translateY(1px); }
+
+    .footer{
+      margin-top: 14px;
+      color: rgba(234,240,255,.6);
+      font-size: 11px;
+      line-height: 1.6;
+      padding: 0 6px;
+    }
+
+    .small{
+      font-size: 11px;
+      color: rgba(234,240,255,.62);
+    }
+  </style>
+
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div class="titlebox">
+        <div class="t1">通勤が奪う“生涯のお金”換算</div>
+        <div class="t2">時間をお金に変えると、見え方が変わる</div>
+      </div>
+    </div>
+    <div class="pill" id="todayPill">—</div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="hero">
+        <h1>通勤時間は“見えない支出”</h1>
+        <p>残り期間の通勤時間を合計し、時給換算で“失っている価値”を見える化します。</p>
+        <div class="kpis">
+          <div class="kpi">
+            <div class="label" id="k1label">—</div>
+            <div class="value" id="k1">—</div>
+            <div class="sub" id="k1sub">—</div>
+          </div>
+          <div class="kpi">
+            <div class="label" id="k2label">—</div>
+            <div class="value" id="k2">—</div>
+            <div class="sub" id="k2sub">—</div>
+          </div>
+        </div>
+      </div>
+      <div class="inner">
+        <div class="sectionTitle">
+          <h2>改善アイデア</h2>
+          <div class="hint">今日からできる</div>
+        </div>
+        <div class="tips" id="tips"></div>
+        <div class="btnRow">
+          <button class="primary" id="copyBtn">結果をコピー</button>
+          <button id="resetBtn">初期値に戻す</button>
+        </div>
+        <div class="footer">※ ざっくり計算です（残り期間の平均として推定）。</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="inner">
+        <div class="sectionTitle">
+          <h2>入力</h2>
+          <div class="hint">カンタン入力</div>
+        </div>
+        
+    <div class="field">
+      <div class="head">
+        <div class="name">現在の年齢</div>
+        <div class="val"><span id="ageV"></span>歳</div>
+      </div>
+      <input id="age" type="range" min="18" max="70" step="1" />
+      
+    </div>
+    
+
+    <div class="field">
+      <div class="head">
+        <div class="name">目標年齢</div>
+        <div class="val"><span id="targetV"></span>歳</div>
+      </div>
+      <input id="target" type="range" min="50" max="110" step="1" />
+      <div class="small">※ ここまでの残り期間で計算</div>
+    </div>
+    
+
+    <div class="field">
+      <div class="head">
+        <div class="name">通勤（往復）</div>
+        <div class="val"><span id="commuteV"></span>分</div>
+      </div>
+      <input id="commute" type="range" min="0" max="240" step="5" />
+      <div class="small">※ 出勤日の往復</div>
+    </div>
+    
+
+    <div class="field">
+      <div class="head">
+        <div class="name">週の出勤日数</div>
+        <div class="val"><span id="workdaysV"></span>日</div>
+      </div>
+      <input id="workdays" type="range" min="0" max="7" step="1" />
+      
+    </div>
+    
+
+    <div class="field">
+      <div class="head">
+        <div class="name">時給換算</div>
+        <div class="val"><span id="hourlyV"></span>円</div>
+      </div>
+      <input id="hourly" type="range" min="800" max="8000" step="50" />
+      <div class="small">※ 年収÷労働時間のざっくりでもOK</div>
+    </div>
+    
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+const $=(id)=>document.getElementById(id);
+function clamp(n,min,max){ return Math.max(min, Math.min(max,n)); }
+function fmt(n){
+  if(Number.isNaN(n)) return "—";
+  const isInt = Math.abs(n - Math.round(n)) < 1e-9;
+  return (isInt ? Math.round(n) : Math.round(n*10)/10).toLocaleString("ja-JP");
+}
+function yen(n){ return Math.round(n).toLocaleString("ja-JP") + " 円"; }
+function manYen(n){ return Math.round(n/10000).toLocaleString("ja-JP") + " 万円"; }
+async function copyText(txt){
+  try{ await navigator.clipboard.writeText(txt); return true; }
+  catch(e){ alert("コピーできませんでした。\n\n"+txt); return false; }
+}
+function setPill(){
+  const now=new Date();
+  const pad=n=>String(n).padStart(2,"0");
+  $("todayPill").textContent = `${now.getFullYear()}/${pad(now.getMonth()+1)}/${pad(now.getDate())}`;
+}
+
+const state={age:32,target:90,commute:60,workdays:5,hourly:2000};
+function compute(){
+  const yearsLeft=Math.max(1, state.target - state.age);
+  const workdaysPerYear = state.workdays*52;
+  const commuteHoursPerDay = state.commute/60;
+  const commuteHoursTotal = commuteHoursPerDay * workdaysPerYear * yearsLeft;
+  const value = commuteHoursTotal * state.hourly;
+  return {yearsLeft, commuteHoursTotal, value};
+}
+function renderTips(){
+  const ideas=[
+    ["週1だけ在宅/直帰","週1回出勤を減らすだけでも長期では巨大。"],
+    ["通勤を15分短縮","ルート見直し/準備の並列化で短縮。"],
+    ["通勤中を“資産化”","耳学習/発信/スキル習得で価値を回収。"],
+  ];
+  $("tips").innerHTML = ideas.map(x=>`<div class="tip"><div class="ttl">${x[0]}</div><div class="txt">${x[1]}</div></div>`).join("");
+}
+function update(){
+  state.age=Number($("age").value);
+  state.target=Math.max(Number($("target").value), state.age+1); $("target").value=state.target;
+  state.commute=Number($("commute").value);
+  state.workdays=Number($("workdays").value);
+  state.hourly=Number($("hourly").value);
+  ["age","target","commute","workdays","hourly"].forEach(k=>$(k+"V").textContent=fmt(state[k]));
+  const c=compute();
+  $("k1label").textContent="生涯の通勤時間（残り期間）";
+  $("k2label").textContent="お金換算（時給×通勤時間）";
+  $("k1").textContent = fmt(c.commuteHoursTotal)+" 時間";
+  $("k1sub").textContent = "（約 "+fmt(c.commuteHoursTotal/24)+" 日分）";
+  $("k2").textContent = manYen(c.value);
+  $("k2sub").textContent = "（約 "+yen(c.value)+"）";
+  renderTips();
+}
+function reset(){
+  Object.assign(state,{age:32,target:90,commute:60,workdays:5,hourly:2000});
+  ["age","target","commute","workdays","hourly"].forEach(k=>$(k).value=state[k]);
+  update();
+}
+async function copyResult(){
+  const c=compute();
+  const txt=`【通勤が奪う“生涯のお金”換算】
+生涯の通勤時間：${Math.round(c.commuteHoursTotal).toLocaleString("ja-JP")}時間（約${Math.round(c.commuteHoursTotal/24).toLocaleString("ja-JP")}日）
+お金換算：${Math.round(c.value/10000).toLocaleString("ja-JP")}万円（時給${state.hourly}円換算）
+設定：${state.age}→${state.target}歳／通勤${state.commute}分×週${state.workdays}`;
+  const ok=await copyText(txt);
+  if(ok){ $("copyBtn").textContent="コピーした！"; setTimeout(()=>$("copyBtn").textContent="結果をコピー",1200); }
+}
+function init(){
+  setPill();
+  ["age","target","commute","workdays","hourly"].forEach(k=>$(k).value=state[k]);
+  ["age","target","commute","workdays","hourly"].forEach(k=>{ $(k).addEventListener("input", update); $(k).addEventListener("change", update); });
+  $("resetBtn").addEventListener("click", reset);
+  $("copyBtn").addEventListener("click", copyResult);
+  update();
+}
+init();
+
+</script>
+
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{ navigator.serviceWorker.register('./sw.js'); });
+}
+</script>
+
+</body>
+</html>
