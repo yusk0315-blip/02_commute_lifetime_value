@@ -248,6 +248,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
+<style id="ys-quality-upgrade">html{scroll-behavior:smooth}button,input,select,textarea{font:inherit}button,.btn,[role=button]{min-height:44px;touch-action:manipulation}input,select,textarea{min-height:44px}input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid rgba(23,107,77,.28)!important;outline-offset:2px}.ys-home{position:fixed;left:12px;bottom:12px;z-index:9999;padding:10px 14px;border:1px solid rgba(23,33,29,.15);border-radius:999px;background:rgba(255,254,250,.94);color:#176b4d;box-shadow:0 10px 28px rgba(0,0,0,.14);text-decoration:none;font-size:13px;font-weight:800}.ys-save{position:fixed;right:12px;bottom:14px;z-index:9998;padding:8px 11px;border-radius:999px;background:#176b4d;color:#fff;font-size:11px;font-weight:800;opacity:0;pointer-events:none}.ys-save.show{opacity:1}@media(max-width:640px){body{padding-bottom:64px}.wrap,.container{width:100%!important;padding-left:14px!important;padding-right:14px!important}.grid{grid-template-columns:1fr!important}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}</style>
 </head>
 <body>
 <div class="wrap">
@@ -441,5 +442,6 @@ if('serviceWorker' in navigator){
 }
 </script>
 
+<script id="ys-quality-script">(()=>{const h=document.createElement("a");h.className="ys-home";h.href="https://yusk0315-blip.github.io/yu.skhome/#apps";h.textContent="← アプリ一覧";document.body.appendChild(h);const t=document.createElement("div");t.className="ys-save";t.textContent="入力を保存しました";document.body.appendChild(t);const k="ys-app:"+location.pathname,f=[...document.querySelectorAll("input,select,textarea")].filter(e=>!["button","submit","reset","file","password"].includes(e.type));try{const s=JSON.parse(localStorage.getItem(k)||"{}");f.forEach((e,i)=>{const d=e.id||e.name||"field-"+i;if(!(d in s))return;e.type==="checkbox"||e.type==="radio"?e.checked=!!s[d]:e.value=s[d];e.dispatchEvent(new Event("input",{bubbles:true}));e.dispatchEvent(new Event("change",{bubbles:true}))})}catch(e){}let x;const save=()=>{const s={};f.forEach((e,i)=>{const d=e.id||e.name||"field-"+i;s[d]=e.type==="checkbox"||e.type==="radio"?e.checked:e.value});try{localStorage.setItem(k,JSON.stringify(s))}catch(e){}t.classList.add("show");clearTimeout(x);x=setTimeout(()=>t.classList.remove("show"),1200)};f.forEach(e=>{e.addEventListener("change",save);e.type==="range"&&e.addEventListener("input",save)})})();</script>
 </body>
 </html>
